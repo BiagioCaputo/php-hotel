@@ -11,6 +11,14 @@ include __DIR__ . '/data/hotels.php';
     <title>php hotels</title>
 </head>
 <body>
+    <ul>
+        <?php foreach($hotels as $hotel) : ?>
+            <li>
+                <?= $hotel['name']?>, <?= $hotel['description']?>, <?= $hotel['parking']?>, <?= $hotel['vote']?>, <?= $hotel['distance_to_center']?>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
     
 </body>
 </html>
