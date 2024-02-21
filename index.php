@@ -3,15 +3,27 @@ include __DIR__ . '/data/hotels.php';
 
 $headings = array_keys($hotels[0]); //se non avessi preso il primo, mi avrebbe preso le posizioni degli index
 
+$rating= $_GET['rating'] ?? NULL;
+
 //Controllo se mi arriva un filtro parcheggio
 
-if(isset($GET['parking'])){
+if(isset($_GET['parking'])){
     $checked = 'checked';
 
     $filtered_hotels = [];
 
     foreach($hotels as $hotel){
         if($hotel['parking']) $filtered_hotels[] = $hotel;
+    }
+
+    $hotels= $filtered_hotels;
+}
+
+//non posso mettere isset altrimenti entrerei sempre nella funzione
+if($rating){
+    $filtered_hotels = [];
+    foreach($hotels as $hotel){
+        if($hotel['vote'] >= $rating) $filtered_hotels[] = $hotel;
     }
 
     $hotels= $filtered_hotels;
@@ -33,10 +45,14 @@ if(isset($GET['parking'])){
 <body class="bg-secondary">
     <div class="container">
         <h1 class="text-center py-5">Hotels</h1>
-        <form method="GET" action="" class="px-5 d-flex align-items-center gap-3">
+        <form method="GET" action="" class="px-5 d-flex align-items-center gap-5">
             <div class="form-check">
                 <label class="form-check-label" for="parking">Only Hotels with parking:</label>
                 <input class="form-check-input" type="checkbox" name="parking" id="parking" <?= $checked ?? '' ?>>
+            </div>
+            <div class="mb-3 d-flex gap-3">
+                <span>Rating</span>
+                <input type='number' class='form-control' name="rating" min="1" max="5" value="<?= $rating ?? 1 ?>">
             </div>
             <button type="submit" class="btn btn-warning">Research</button>
         </form>
