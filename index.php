@@ -1,5 +1,21 @@
 <?php
 include __DIR__ . '/data/hotels.php';
+
+$headings = array_keys($hotels[0]); //se non avessi preso il primo, mi avrebbe preso le posizioni degli index
+
+//Controllo se mi arriva un filtro parcheggio
+
+if(isset($GET['parking'])){
+    $checked = 'checked';
+
+    $filtered_hotels = [];
+
+    foreach($hotels as $hotel){
+        if($hotel['parking']) $filtered_hotels[] = $hotel;
+    }
+
+    $hotels= $filtered_hotels;
+}
 ?>
 
 
@@ -17,15 +33,20 @@ include __DIR__ . '/data/hotels.php';
 <body class="bg-secondary">
     <div class="container">
         <h1 class="text-center py-5">Hotels</h1>
+        <form method="GET" action="" class="px-5 d-flex align-items-center gap-3">
+            <div class="form-check">
+                <label class="form-check-label" for="parking">Only Hotels with parking:</label>
+                <input class="form-check-input" type="checkbox" name="parking" id="parking" <?= $checked ?? '' ?>>
+            </div>
+            <button type="submit" class="btn btn-warning">Research</button>
+        </form>
         <div class="tabel-box p-5">
                 <table class="table table-warning">
                     <thead>
                         <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Parking</th>
-                        <th scope="col">Vote</th>
-                        <th scope="col">Distance to center</th>
+                        <?php foreach($headings as $heading) : ?>
+                        <th scope="col"> <?= ucfirst($heading) ?> </th>
+                        <?php endforeach ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,8 +55,8 @@ include __DIR__ . '/data/hotels.php';
                             <th scope="row"><?= $hotel['name']?></th>
                             <td><?= $hotel['description']?></td>
                             <td><?= $hotel['parking']? "<i class='fa-solid fa-circle-check' style='color: green'</i>" : "<i class='fa-solid fa-circle-xmark' style='color: red'></i>" ?></td>
-                            <td><?= $hotel['vote']?></td>
-                            <td><?= $hotel['distance_to_center']?></td>
+                            <td><?= $hotel['vote']?>/5</td>
+                            <td><?= $hotel['distance_to_center']?> km</td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
